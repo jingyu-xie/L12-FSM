@@ -6,6 +6,7 @@ using System;
 
 public class PlayerController : MonoBehaviour
 {
+    #region All Variables
     // Basic Variables
     private Rigidbody2D rb;
     private Animator playerAnimator;
@@ -22,13 +23,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float jumpForce;
 
+    // Variables to Check whether players is on ground
     [SerializeField]
     private float checkRadius;
     [SerializeField]
     private LayerMask groundLayer;
     public bool isGrounded;
-
-    private bool isRunning;
+    #endregion
 
     private void Awake()
     {
@@ -40,8 +41,6 @@ public class PlayerController : MonoBehaviour
         // when the jump button in input control is called, call Jump()
         inputControl = new InputControls();
         inputControl.Gameplay.Jump.started += Jump;
-
-        isRunning = false;
     }
 
     // Most physics related function in Fixed Update
@@ -83,6 +82,7 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
+    #region Jump Related Functions
     /**
     void Jump()
     Input: void
@@ -96,6 +96,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
+    #endregion
 
     #region Enable and Disable Input System
     private void OnEnable()

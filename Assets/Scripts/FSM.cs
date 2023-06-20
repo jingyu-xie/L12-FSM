@@ -8,7 +8,7 @@ public class FSM : MonoBehaviour
 {
     #region All Variables
     // State Related Variables
-    private enum PlayerState { Idle, Run, Jump}
+    private enum PlayerState { Idle, Run, FastRun, Jump}
     private PlayerState pstate;
 
     // Component Variables
@@ -50,11 +50,15 @@ public class FSM : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(pstate.ToString());
         // Read the direction of movement from input
         inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
 
         // Function to switch animation
         SetAnimation();
+
+        // Flip sprite based on moving direction
+        FlipSprite();
 
         // FSM
         switch (pstate)
@@ -69,13 +73,17 @@ public class FSM : MonoBehaviour
                 RunTransitions();
                 break;
 
+            case PlayerState.FastRun:
+                FastRunActions();
+                FastRunTransitions();
+                break;
+
             case PlayerState.Jump:
                 JumpActions();
                 JumpTransitions();
                 break;
         }
     }
-
     // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
@@ -85,11 +93,16 @@ public class FSM : MonoBehaviour
             rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
         }
 
+        if (pstate == PlayerState.FastRun)
+        {
+            rb.velocity = new Vector2(inputDirection.x * 2f * speed * Time.deltaTime, rb.velocity.y);
+        }
+
         // Check whether the players is on ground
         isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer); 
     }
 
-    #region Idle State Related Functions
+    #region Idle State
     private void IdleActions()
     {
         
@@ -99,20 +112,22 @@ public class FSM : MonoBehaviour
     {
         if (inputControl.Gameplay.Movement.IsPressed())
         {
-            pstate = PlayerState.Run;
+            if (inputControl.Gameplay.FastRun.IsPressed())
+                pstate = PlayerState.FastRun;
+            else
+                pstate = PlayerState.Run;
         }
-        else if (inputControl.Gameplay.Jump.triggered)
+
+        if (inputControl.Gameplay.Jump.triggered)
         {
             pstate = PlayerState.Jump;
         }
     }
     #endregion
 
-    #region Run State Related Functions
+    #region Run State
     private void RunActions()
     {
-        // Flip sprite based on moving direction
-        FlipSprite();
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
     }
 
@@ -122,22 +137,44 @@ public class FSM : MonoBehaviour
         {
             pstate = PlayerState.Idle;
         }
-        else if (inputControl.Gameplay.Jump.triggered)
+        
+        if (inputControl.Gameplay.FastRun.IsPressed())
+        {
+            Debug.Log("fastrun");
+            pstate = PlayerState.FastRun;
+        }
+
+        if (inputControl.Gameplay.Jump.triggered)
         {
             pstate = PlayerState.Jump;
         }
     }
+    #endregion
 
-    private void FlipSprite()
+    #region Fast Run State
+    private void FastRunActions()
     {
-        if (inputDirection.x > 0)
-            spriteRenderer.flipX = false;
-        if (inputDirection.x < 0)
-            spriteRenderer.flipX = true;
+        rb.velocity = new Vector2(inputDirection.x * 2f * speed * Time.deltaTime, rb.velocity.y);
+    }
+
+    private void FastRunTransitions()
+    {
+        if (!inputControl.Gameplay.Movement.IsPressed())
+        {
+            pstate = PlayerState.Idle;
+        }
+
+        if (!inputControl.Gameplay.FastRun.IsPressed())
+            pstate = PlayerState.Run;
+
+        if (inputControl.Gameplay.Jump.triggered)
+        {
+            pstate = PlayerState.Jump;
+        }
     }
     #endregion
 
-    #region Jump State Related Functions
+    #region Jump State
     private void JumpActions()
     {
         if (isGrounded)
@@ -176,5 +213,13 @@ public class FSM : MonoBehaviour
         playerAnimator.SetFloat("vX", MathF.Abs(rb.velocity.x));
         playerAnimator.SetFloat("vY", rb.velocity.y);
         playerAnimator.SetBool("isGrounded", isGrounded);
+    }
+
+    private void FlipSprite()
+    {
+        if (inputDirection.x > 0)
+            spriteRenderer.flipX = false;
+        if (inputDirection.x < 0)
+            spriteRenderer.flipX = true;
     }
 }
