@@ -37,22 +37,14 @@ public class PlayerController : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         playerAnimator = GetComponent<Animator>();
 
+        // when the jump button in input control is called, call Jump()
         inputControl = new InputControls();
         inputControl.Gameplay.Jump.started += Jump;
 
         isRunning = false;
     }
 
-    private void OnEnable()
-    {
-        inputControl.Enable();
-    }
-
-    private void OnDisable()
-    {
-        inputControl.Disable();
-    }
-
+    // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
         Movement();
@@ -65,29 +57,65 @@ public class PlayerController : MonoBehaviour
         SetAnimation();
     }
 
+    #region Movement Related Functions
+    /**
+        void Movement()
+        Input: void
+        Output: void
+        Function:
+            - move players along x-axis with speed
+     */
     private void Movement()
     {
         // Move player
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
 
         // Flip sprite based on moving direction
+        FlipSprite();
+    }
+
+    private void FlipSprite()
+    {
         if (inputDirection.x > 0)
-                spriteRenderer.flipX = false;
+            spriteRenderer.flipX = false;
         if (inputDirection.x < 0)
             spriteRenderer.flipX = true;
     }
+    #endregion
 
+    /**
+    void Jump()
+    Input: void
+    Output: callback
+    Function:
+        - Be called when the space is pressed
+        - Add force to allow player jump
+    */
     private void Jump(InputAction.CallbackContext context)
     {
         if (isGrounded)
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
+    #region Enable and Disable Input System
+    private void OnEnable()
+    {
+        inputControl.Enable();
+    }
+
+    private void OnDisable()
+    {
+        inputControl.Disable();
+    }
+    #endregion
+
+    // Function used to visualize the area of checking whether player is standing on ground
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
 
+    // SetAnimation: change animation based on the player info on rigid body
     private void SetAnimation()
     {
         playerAnimator.SetFloat("vX", MathF.Abs(rb.velocity.x));

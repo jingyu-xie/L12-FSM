@@ -76,7 +76,6 @@ public class FSM : MonoBehaviour
         }
     }
 
-
     // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
@@ -113,11 +112,7 @@ public class FSM : MonoBehaviour
     private void RunActions()
     {
         // Flip sprite based on moving direction
-        if (inputDirection.x > 0)
-            spriteRenderer.flipX = false;
-        if (inputDirection.x < 0)
-            spriteRenderer.flipX = true;
-
+        FlipSprite();
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
     }
 
@@ -131,6 +126,14 @@ public class FSM : MonoBehaviour
         {
             pstate = PlayerState.Jump;
         }
+    }
+
+    private void FlipSprite()
+    {
+        if (inputDirection.x > 0)
+            spriteRenderer.flipX = false;
+        if (inputDirection.x < 0)
+            spriteRenderer.flipX = true;
     }
     #endregion
 
@@ -167,7 +170,7 @@ public class FSM : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
 
-    // Function SetAnimation: change animation based on the player info on rigid body
+    // SetAnimation: change animation based on the player info on rigid body
     private void SetAnimation()
     {
         playerAnimator.SetFloat("vX", MathF.Abs(rb.velocity.x));
