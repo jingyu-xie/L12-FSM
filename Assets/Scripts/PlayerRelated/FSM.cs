@@ -8,7 +8,7 @@ public class FSM : MonoBehaviour
 {
     #region All Variables
     // State Related Variables
-    private enum PlayerState { Idle, Run, FastRun, Jump}
+    private enum PlayerState { Idle, Run, FastRun, Jump, DoubleJump}
     private PlayerState pstate;
 
     // Component Variables
@@ -17,8 +17,8 @@ public class FSM : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     // Input Variables
-    public InputControls inputControl;
-    public Vector2 inputDirection;
+    private InputControls inputControl;
+    private Vector2 inputDirection;
 
     // Design Variables
     [Header("Basic Variables")]
@@ -60,6 +60,9 @@ public class FSM : MonoBehaviour
         // Flip sprite based on moving direction
         FlipSprite();
 
+        // Check whether the players is on ground
+        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
+
         // FSM
         switch (pstate)
         {
@@ -82,8 +85,14 @@ public class FSM : MonoBehaviour
                 JumpActions();
                 JumpTransitions();
                 break;
+
+            case PlayerState.DoubleJump:
+                DoubleJumpActions();
+                DoubleJumpTransitions();
+                break;
         }
     }
+
     // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
@@ -97,15 +106,12 @@ public class FSM : MonoBehaviour
         {
             rb.velocity = new Vector2(inputDirection.x * 2f * speed * Time.deltaTime, rb.velocity.y);
         }
-
-        // Check whether the players is on ground
-        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer); 
     }
 
     #region Idle State
     private void IdleActions()
     {
-        
+
     }
 
     private void IdleTransitions()
@@ -118,7 +124,7 @@ public class FSM : MonoBehaviour
                 pstate = PlayerState.Run;
         }
 
-        if (inputControl.Gameplay.Jump.triggered)
+        if (inputControl.Gameplay.Jump.triggered && isGrounded)
         {
             pstate = PlayerState.Jump;
         }
@@ -140,11 +146,10 @@ public class FSM : MonoBehaviour
         
         if (inputControl.Gameplay.FastRun.IsPressed())
         {
-            Debug.Log("fastrun");
             pstate = PlayerState.FastRun;
         }
 
-        if (inputControl.Gameplay.Jump.triggered)
+        if (inputControl.Gameplay.Jump.triggered && isGrounded)
         {
             pstate = PlayerState.Jump;
         }
@@ -167,7 +172,7 @@ public class FSM : MonoBehaviour
         if (!inputControl.Gameplay.FastRun.IsPressed())
             pstate = PlayerState.Run;
 
-        if (inputControl.Gameplay.Jump.triggered)
+        if (inputControl.Gameplay.Jump.triggered && isGrounded)
         {
             pstate = PlayerState.Jump;
         }
@@ -177,17 +182,28 @@ public class FSM : MonoBehaviour
     #region Jump State
     private void JumpActions()
     {
-        if (isGrounded)
-        {
-            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
-        }
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     private void JumpTransitions()
     {
-        pstate = PlayerState.Idle;
+        if (isGrounded)
+            pstate = PlayerState.Idle;
+        else if (inputControl.Gameplay.Jump.triggered)
+            pstate = PlayerState.DoubleJump;
     }
     #endregion
+
+    private void DoubleJumpActions()
+    {
+        Debug.Log("double jump");
+        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); 
+    }
+
+    private void DoubleJumpTransitions()
+    {
+        pstate = PlayerState.Idle;
+    }
 
     #region Enable and Disable Input System
     private void OnEnable()

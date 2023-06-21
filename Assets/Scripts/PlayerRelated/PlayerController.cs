@@ -13,8 +13,8 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     // Input Variables
-    public InputControls inputControl;
-    public Vector2 inputDirection;
+    private InputControls inputControl;
+    private Vector2 inputDirection;
 
     // Design Variables
     [Header("Basic Variables")]
@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private float checkRadius;
     [SerializeField]
     private LayerMask groundLayer;
-    public bool isGrounded;
+    private bool isGrounded;
     #endregion
 
     private void Awake()
@@ -53,7 +53,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
+
+        // Set animation based on input
         SetAnimation();
+
+        // Flip sprite based on moving direction
+        FlipSprite();
     }
 
     #region Movement Related Functions
@@ -68,17 +73,6 @@ public class PlayerController : MonoBehaviour
     {
         // Move player
         rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
-
-        // Flip sprite based on moving direction
-        FlipSprite();
-    }
-
-    private void FlipSprite()
-    {
-        if (inputDirection.x > 0)
-            spriteRenderer.flipX = false;
-        if (inputDirection.x < 0)
-            spriteRenderer.flipX = true;
     }
     #endregion
 
@@ -96,6 +90,7 @@ public class PlayerController : MonoBehaviour
         if (isGrounded)
             rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
+
     #endregion
 
     #region Enable and Disable Input System
@@ -122,5 +117,14 @@ public class PlayerController : MonoBehaviour
         playerAnimator.SetFloat("vX", MathF.Abs(rb.velocity.x));
         playerAnimator.SetFloat("vY", rb.velocity.y);
         playerAnimator.SetBool("isGrounded", isGrounded);
+    }
+
+    // FlipSprite: Flip player's sprite based on the moving direction
+    private void FlipSprite()
+    {
+        if (inputDirection.x > 0)
+            spriteRenderer.flipX = false;
+        if (inputDirection.x < 0)
+            spriteRenderer.flipX = true;
     }
 }
