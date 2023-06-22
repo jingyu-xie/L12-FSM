@@ -8,7 +8,9 @@ public class FSM : MonoBehaviour
 {
     #region All Variables
     // State Related Variables
-    private enum PlayerState { Idle, Run, FastRun, Jump, DoubleJump}
+    private enum PlayerState { Idle, Run, FastRun, Jump, DoubleJump,
+        InAir
+    }
     private PlayerState pstate;
 
     // Component Variables
@@ -26,6 +28,8 @@ public class FSM : MonoBehaviour
     private float speed;
     [SerializeField]
     private float jumpForce;
+    private bool isDoubleJumped;
+
 
     [SerializeField]
     private float checkRadius;
@@ -111,7 +115,7 @@ public class FSM : MonoBehaviour
     #region Idle State
     private void IdleActions()
     {
-
+        isDoubleJumped = false;
     }
 
     private void IdleTransitions()
@@ -143,16 +147,18 @@ public class FSM : MonoBehaviour
         {
             pstate = PlayerState.Idle;
         }
-        
-        if (inputControl.Gameplay.FastRun.IsPressed())
-        {
-            pstate = PlayerState.FastRun;
-        }
 
         if (inputControl.Gameplay.Jump.triggered && isGrounded)
         {
             pstate = PlayerState.Jump;
         }
+
+        if (inputControl.Gameplay.FastRun.IsPressed())
+        {
+            pstate = PlayerState.FastRun;
+        }
+
+
     }
     #endregion
 
@@ -182,27 +188,33 @@ public class FSM : MonoBehaviour
     #region Jump State
     private void JumpActions()
     {
-        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        rb.velocity = Vector2.up * jumpForce;
+        //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     private void JumpTransitions()
     {
+        if (inputControl.Gameplay.Jump.triggered && !isDoubleJumped)
+        {
+            pstate = PlayerState.DoubleJump;
+        }
+
         if (isGrounded)
             pstate = PlayerState.Idle;
-        else if (inputControl.Gameplay.Jump.triggered)
-            pstate = PlayerState.DoubleJump;
     }
     #endregion
 
     private void DoubleJumpActions()
     {
-        Debug.Log("double jump");
-        rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse); 
+        isDoubleJumped = true;
+        rb.velocity = Vector2.up * jumpForce;
+        //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
     }
 
     private void DoubleJumpTransitions()
     {
-        pstate = PlayerState.Idle;
+        if (isGrounded)
+            pstate = PlayerState.Idle;
     }
 
     #region Enable and Disable Input System
