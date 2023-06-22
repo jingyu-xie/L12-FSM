@@ -22,6 +22,9 @@ public class PlayerController : MonoBehaviour
     private float speed;
     [SerializeField]
     private float jumpForce;
+    [SerializeField]
+    private int jumpLimit;
+    private int jumpCnt;
 
     // Variables to Check whether players is on ground
     [SerializeField]
@@ -59,6 +62,9 @@ public class PlayerController : MonoBehaviour
 
         // Flip sprite based on moving direction
         FlipSprite();
+
+        if (isGrounded)
+            jumpCnt = jumpLimit;
     }
 
     #region Movement Related Functions
@@ -87,8 +93,18 @@ public class PlayerController : MonoBehaviour
     */
     private void Jump(InputAction.CallbackContext context)
     {
+        jumpCnt--;
+
         if (isGrounded)
-            rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        {
+            //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+            rb.velocity = Vector2.up * jumpForce;
+        }
+        else if (jumpCnt > 0)
+        {
+            //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+            rb.velocity = Vector2.up * jumpForce;
+        }
     }
 
     #endregion
