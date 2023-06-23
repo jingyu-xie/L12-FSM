@@ -391,7 +391,7 @@ GameObject:
   - component: {fileID: 419481117}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -540,6 +540,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  knockbackForce: 0
 --- !u!1 &478962804
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,8 +696,8 @@ TilemapRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 567383029
-  m_SortingLayer: 2
+  m_SortingLayerID: 162940537
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_ChunkSize: {x: 32, y: 32, z: 32}
   m_ChunkCullingBounds: {x: 0, y: 0, z: 0}
@@ -19607,14 +19608,6 @@ CompositeCollider2D:
         Y: 10000000
       - X: -100000000
         Y: 10000000
-    - - X: 170000000
-        Y: 60000000
-      - X: 130000000
-        Y: 60000000
-      - X: 130000000
-        Y: 20000000
-      - X: 170000000
-        Y: 20000000
     - - X: 10000000
         Y: 50000000
       - X: 0
@@ -19693,10 +19686,6 @@ CompositeCollider2D:
       - {x: -10.00003, y: 10}
       - {x: -11, y: 9.99997}
       - {x: -10.99997, y: 1}
-    - - {x: 16.999971, y: 2}
-      - {x: 16.999971, y: 6}
-      - {x: 13, y: 5.999971}
-      - {x: 13.00003, y: 2}
     - - {x: 0.99997073, y: 3}
       - {x: 0.99997073, y: 5}
       - {x: 0, y: 4.999971}
@@ -19960,7 +19949,7 @@ GameObject:
   - component: {fileID: 1741369925}
   m_Layer: 0
   m_Name: Saw
-  m_TagString: Untagged
+  m_TagString: Trap
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -20101,7 +20090,7 @@ Rigidbody2D:
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 1
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 6200000, guid: e30862f68a32a4843a70af98835a5016, type: 2}
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 0

@@ -5,7 +5,7 @@ using UnityEngine;
 using System;
 using Unity.VisualScripting;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController1 : MonoBehaviour
 {
     #region All Variables
     // Basic Variables
@@ -33,10 +33,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private LayerMask groundLayer;
     private bool isGrounded;
-
-    [SerializeField]
-    private int knockbackForce;
-    private bool isKnockBack;
     #endregion
 
     private void Awake()
@@ -54,8 +50,7 @@ public class PlayerController : MonoBehaviour
     // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
-        if (!isKnockBack)
-            Movement();
+        Movement();
         isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
     }
 
@@ -70,10 +65,7 @@ public class PlayerController : MonoBehaviour
         FlipSprite();
 
         if (isGrounded)
-        {
-            isKnockBack = false;
             jumpCnt = jumpLimit;
-        }
     }
 
     #region Movement Related Functions
@@ -135,8 +127,7 @@ public class PlayerController : MonoBehaviour
         if (other.gameObject.tag == "Trap")
         {
             Debug.Log("hurt");
-            isKnockBack = true;
-            rb.velocity = new Vector2(knockbackForce, knockbackForce);
+            rb.velocity = new Vector2(10, 10);
         }
     }
 
