@@ -1071,7 +1071,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_46
+      name: wood_1
       rect:
         serializedVersion: 2
         x: 0
@@ -1092,7 +1092,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_47
+      name: wood_2
       rect:
         serializedVersion: 2
         x: 16
@@ -1113,7 +1113,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_48
+      name: wood_4
       rect:
         serializedVersion: 2
         x: 32
@@ -1134,7 +1134,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_49
+      name: wood_9
       rect:
         serializedVersion: 2
         x: 48
@@ -1155,7 +1155,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_50
+      name: wood_10
       rect:
         serializedVersion: 2
         x: 64
@@ -1470,7 +1470,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_65
+      name: wood_
       rect:
         serializedVersion: 2
         x: 0
@@ -1491,7 +1491,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_66
+      name: wood_empty
       rect:
         serializedVersion: 2
         x: 16
@@ -1512,7 +1512,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_67
+      name: wood_5
       rect:
         serializedVersion: 2
         x: 32
@@ -1533,7 +1533,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_68
+      name: wood_11
       rect:
         serializedVersion: 2
         x: 48
@@ -1554,7 +1554,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_69
+      name: wood_12
       rect:
         serializedVersion: 2
         x: 64
@@ -1869,7 +1869,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_84
+      name: wood_6
       rect:
         serializedVersion: 2
         x: 0
@@ -1890,7 +1890,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_85
+      name: wood_7
       rect:
         serializedVersion: 2
         x: 16
@@ -1911,7 +1911,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Terrain (16x16) 1_86
+      name: wood_8
       rect:
         serializedVersion: 2
         x: 32
@@ -3216,11 +3216,6 @@ TextureImporter:
       Terrain (16x16) 1_43: 1332550808
       Terrain (16x16) 1_44: 885009072
       Terrain (16x16) 1_45: -1937176589
-      Terrain (16x16) 1_46: -1231539101
-      Terrain (16x16) 1_47: -352593899
-      Terrain (16x16) 1_48: -2133444460
-      Terrain (16x16) 1_49: 892611815
-      Terrain (16x16) 1_50: -1822578986
       Terrain (16x16) 1_51: -1647934000
       Terrain (16x16) 1_52: 1132880729
       Terrain (16x16) 1_53: 422456761
@@ -3235,11 +3230,6 @@ TextureImporter:
       Terrain (16x16) 1_62: -1667009636
       Terrain (16x16) 1_63: -1925992483
       Terrain (16x16) 1_64: -71838295
-      Terrain (16x16) 1_65: 2006766725
-      Terrain (16x16) 1_66: -865433715
-      Terrain (16x16) 1_67: -2145619690
-      Terrain (16x16) 1_68: -221455610
-      Terrain (16x16) 1_69: -1991274530
       Terrain (16x16) 1_70: -460269930
       Terrain (16x16) 1_71: -798301153
       Terrain (16x16) 1_72: 1620671892
@@ -3254,9 +3244,6 @@ TextureImporter:
       Terrain (16x16) 1_81: -85822556
       Terrain (16x16) 1_82: -56473338
       Terrain (16x16) 1_83: 1165577378
-      Terrain (16x16) 1_84: 1254692275
-      Terrain (16x16) 1_85: 501275393
-      Terrain (16x16) 1_86: -1827303496
       Terrain (16x16) 1_87: -2139722855
       Terrain (16x16) 1_88: 75690835
       Terrain (16x16) 1_89: -762816721
@@ -3283,6 +3270,19 @@ TextureImporter:
       greengrass_7: -2093012938
       greengrass_8: -477846962
       greengrass_9: -336821415
+      wood_: 2006766725
+      wood_1: -1231539101
+      wood_10: -1822578986
+      wood_11: -221455610
+      wood_12: -1991274530
+      wood_2: -352593899
+      wood_4: -2133444460
+      wood_5: -2145619690
+      wood_6: 1254692275
+      wood_7: 501275393
+      wood_8: -1827303496
+      wood_9: 892611815
+      wood_empty: -865433715
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
