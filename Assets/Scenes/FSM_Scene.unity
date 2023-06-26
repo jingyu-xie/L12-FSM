@@ -540,7 +540,6 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  knockbackForce: 0
 --- !u!1 &478962804
 GameObject:
   m_ObjectHideFlags: 0
@@ -20176,9 +20175,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.00000011920929, y: 0}
+  m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.19
+  m_Radius: 0.20411518
 --- !u!212 &1741369924
 SpriteRenderer:
   m_ObjectHideFlags: 0

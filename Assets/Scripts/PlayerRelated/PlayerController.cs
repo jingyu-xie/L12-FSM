@@ -34,8 +34,6 @@ public class PlayerController : MonoBehaviour
     private LayerMask groundLayer;
     private bool isGrounded;
 
-    [SerializeField]
-    private int knockbackForce;
     private bool isKnockBack;
     #endregion
 
@@ -138,7 +136,7 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("hurt");
             isKnockBack = true;
-            rb.velocity = new Vector2(knockbackForce, knockbackForce);
+            //rb.velocity = new Vector2(-rb.velocity.normalized.x * knockbackForce, 100);
         }
     }
 
