@@ -56,11 +56,13 @@ public class PlayerController : MonoBehaviour
     {
         if (!isKnockBack)
             Movement();
-        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
+        
     }
 
     private void Update()
     {
+        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
+
         inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
 
         // Set animation based on input
