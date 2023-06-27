@@ -8,9 +8,7 @@ public class FSM : MonoBehaviour
 {
     #region All Variables
     // State Related Variables
-    private enum PlayerState { Idle, Run, FastRun, Jump, DoubleJump,
-        InAir
-    }
+    private enum PlayerState { Idle, Run, FastRun, Jump, InAir, KnockBack}
     private PlayerState pstate;
 
     // Component Variables
@@ -35,7 +33,8 @@ public class FSM : MonoBehaviour
     private float checkRadius;
     [SerializeField]
     private LayerMask groundLayer;
-    public bool isGrounded;
+    private bool isGrounded;
+    private bool isKnockBack;
     #endregion
 
     private void Awake()
@@ -90,9 +89,14 @@ public class FSM : MonoBehaviour
                 JumpTransitions();
                 break;
 
-            case PlayerState.DoubleJump:
-                DoubleJumpActions();
-                DoubleJumpTransitions();
+            case PlayerState.InAir:
+                InAirActions();
+                InAirTransitions();
+                break;
+
+            case PlayerState.KnockBack:
+                KnockBackActions();
+                KnockBackTransitions();
                 break;
         }
     }
@@ -100,15 +104,19 @@ public class FSM : MonoBehaviour
     // Most physics related function in Fixed Update
     private void FixedUpdate()
     {
-        // when it's in Run State, move rigid body
-        if (pstate == PlayerState.Run)
+        switch (pstate)
         {
-            rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
-        }
+            case PlayerState.Run:
+                rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
+                break;
 
-        if (pstate == PlayerState.FastRun)
-        {
-            rb.velocity = new Vector2(inputDirection.x * 2f * speed * Time.deltaTime, rb.velocity.y);
+            case PlayerState.FastRun:
+                rb.velocity = new Vector2(inputDirection.x * 2f * speed * Time.deltaTime, rb.velocity.y);
+                break;
+
+            case PlayerState.InAir:
+                rb.velocity = new Vector2(inputDirection.x * speed * Time.deltaTime, rb.velocity.y);
+                break;
         }
     }
 
@@ -116,6 +124,7 @@ public class FSM : MonoBehaviour
     private void IdleActions()
     {
         isDoubleJumped = false;
+        isKnockBack = false;
     }
 
     private void IdleTransitions()
@@ -194,28 +203,41 @@ public class FSM : MonoBehaviour
 
     private void JumpTransitions()
     {
+        pstate = PlayerState.InAir;
+    }
+    #endregion
+
+    #region In Air State
+    private void InAirActions()
+    {
+
+    }
+
+    private void InAirTransitions()
+    {
         if (inputControl.Gameplay.Jump.triggered && !isDoubleJumped)
         {
-            pstate = PlayerState.DoubleJump;
+            isDoubleJumped = true;
+            pstate = PlayerState.Jump;
         }
 
-        if (isGrounded)
+        if (isGrounded && rb.velocity.y < 0.1)
             pstate = PlayerState.Idle;
     }
     #endregion
 
-    private void DoubleJumpActions()
+    #region Knock Back State
+    private void KnockBackActions()
     {
-        isDoubleJumped = true;
-        rb.velocity = Vector2.up * jumpForce;
-        //rb.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+        isKnockBack = true;
     }
 
-    private void DoubleJumpTransitions()
+    private void KnockBackTransitions()
     {
-        if (isGrounded)
+        if (isGrounded && rb.velocity.y < 0.1)
             pstate = PlayerState.Idle;
     }
+    #endregion
 
     #region Enable and Disable Input System
     private void OnEnable()
@@ -235,12 +257,19 @@ public class FSM : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, checkRadius);
     }
 
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "Trap")
+            pstate = PlayerState.KnockBack;
+    }
+
     // SetAnimation: change animation based on the player info on rigid body
     private void SetAnimation()
     {
         playerAnimator.SetFloat("vX", MathF.Abs(rb.velocity.x));
         playerAnimator.SetFloat("vY", rb.velocity.y);
         playerAnimator.SetBool("isGrounded", isGrounded);
+        playerAnimator.SetBool("isHit", isKnockBack);
     }
 
     private void FlipSprite()
