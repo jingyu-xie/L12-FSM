@@ -163,7 +163,6 @@ public class PlayerController : MonoBehaviour
         {
             Debug.Log("hurt");
             isKnockBack = true;
-            //rb.velocity = new Vector2(-rb.velocity.normalized.x * knockbackForce, 100);
         }
     }
     #endregion

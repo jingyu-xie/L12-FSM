@@ -26,7 +26,12 @@ public class ChainSaw : MonoBehaviour
 
     private void FixedUpdate()
     {
-        Movement();
+        //Movement();
+    }
+
+    private void Update()
+    {
+        AnotherMovement();
     }
 
     private void Movement()
@@ -45,6 +50,21 @@ public class ChainSaw : MonoBehaviour
             rb.velocity = new Vector2(speed * Time.deltaTime, rb.velocity.y);
         else
             rb.velocity = new Vector2(-speed * Time.deltaTime, rb.velocity.y);
+    }
+
+    private void AnotherMovement()
+    {
+        if (Vector2.Distance(transform.localPosition, currentTarget) < 0.05f)
+        {
+            if (isMovingRight)
+                currentTarget = leftPoint.transform.localPosition;
+            else
+                currentTarget = rightPoint.transform.localPosition;
+
+            isMovingRight = !isMovingRight;
+        }
+
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, currentTarget, speed * Time.deltaTime);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)

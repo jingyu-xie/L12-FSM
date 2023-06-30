@@ -53,7 +53,6 @@ public class FSM : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(pstate.ToString());
         // Read the direction of movement from input
         inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
 
