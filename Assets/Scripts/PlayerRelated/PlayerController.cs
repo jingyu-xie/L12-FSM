@@ -4,6 +4,7 @@ using UnityEngine.InputSystem;
 using UnityEngine;
 using System;
 using Unity.VisualScripting;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -156,15 +157,25 @@ public class PlayerController : MonoBehaviour
     }
     #endregion
 
-    #region Trap Collision & KnockBack Functions
+    #region Collision & KnockBack Functions
     private void OnCollisionEnter2D(Collision2D other)
-    {
+    {   
         if (other.gameObject.tag == "Trap")
         {
-            Debug.Log("hurt");
             isKnockBack = true;
         }
+
+        if (other.gameObject.tag == "DeathZone")
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
+
+        if (other.gameObject.tag == "Goal")
+            Debug.Log("Win");
     }
+
+    
+
     #endregion
 
     #region Player Animation and Sprite Related Functions

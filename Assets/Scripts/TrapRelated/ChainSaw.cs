@@ -15,6 +15,11 @@ public class ChainSaw : MonoBehaviour
     private bool isMovingRight;
     public Vector2 currentTarget;
 
+    [SerializeField]
+    private List<GameObject> pointList;
+    private int currentTargetIndex;
+    private bool isMovingTo;
+
     private Vector2 knockBackDirection;
 
     private void Awake()
@@ -22,6 +27,9 @@ public class ChainSaw : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         currentTarget = rightPoint.transform.localPosition;
         isMovingRight = true;
+
+        isMovingTo = true;
+        currentTargetIndex = 1;
     }
 
     private void FixedUpdate()
@@ -31,7 +39,8 @@ public class ChainSaw : MonoBehaviour
 
     private void Update()
     {
-        AnotherMovement();
+        //AnotherMovement();
+        ListMovement();
     }
 
     private void Movement()
@@ -67,6 +76,32 @@ public class ChainSaw : MonoBehaviour
             transform.localPosition = Vector2.MoveTowards(transform.localPosition, currentTarget, speed * Time.deltaTime);
     }
 
+    private void ListMovement()
+    {
+        Debug.Log(currentTargetIndex);
+        MoveTo(pointList[currentTargetIndex].transform.localPosition);
+    }
+
+    private void MoveTo(Vector2 nextPosition)
+    {
+        if (Vector2.Distance(transform.localPosition, nextPosition) > 0.05f)
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, nextPosition, speed * Time.deltaTime);
+        else
+        {
+            if (currentTargetIndex == pointList.Count - 1)
+                isMovingTo = false;
+            else if (currentTargetIndex == 0)
+                isMovingTo = true;
+
+            if (isMovingTo)
+                currentTargetIndex++;
+            else
+                currentTargetIndex--;
+
+            MoveTo(pointList[currentTargetIndex].transform.localPosition);
+        }
+    }
+
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Player")
@@ -79,4 +114,6 @@ public class ChainSaw : MonoBehaviour
             collision.rigidbody.AddForce(knockBackDirection, ForceMode2D.Impulse);
         }
     }
+
+
 }
