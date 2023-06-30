@@ -57,6 +57,9 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+        if (inputDirection.x == 0)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
         // Ground Check about whether player is standing on ground
         isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
 

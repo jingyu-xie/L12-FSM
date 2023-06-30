@@ -123,7 +123,7 @@ public class FSM : MonoBehaviour
     #region Idle State
     private void IdleActions()
     {
-        
+        rb.velocity = new Vector2(0, rb.velocity.y);
     }
 
     private void IdleTransitions()
