@@ -78,7 +78,7 @@ public class ChainSaw : MonoBehaviour
 
     private void ListMovement()
     {
-        Debug.Log(currentTargetIndex);
+        //MoveTo(pointList[currentTargetIndex].transform.localPosition);
         MoveTo(pointList[currentTargetIndex].transform.localPosition);
     }
 
@@ -97,6 +97,24 @@ public class ChainSaw : MonoBehaviour
                 MoveTo(pointList[++currentTargetIndex].transform.localPosition);
             else
                 MoveTo(pointList[--currentTargetIndex].transform.localPosition);
+        }
+    }
+
+    private void LoopMovement(Vector2 nextPosition)
+    {
+        if (Vector2.Distance(transform.localPosition, nextPosition) > 0.05f)
+            transform.localPosition = Vector2.MoveTowards(transform.localPosition, nextPosition, speed * Time.deltaTime);
+        else
+        {
+            if (currentTargetIndex == pointList.Count - 1)
+            {
+                currentTargetIndex = 0;
+            }
+            else if (currentTargetIndex == 0)
+            {
+                currentTargetIndex++;
+            }
+            MoveTo(pointList[currentTargetIndex].transform.localPosition);
         }
     }
 

@@ -36,6 +36,12 @@ public class PlayerController : MonoBehaviour
     private bool isDoubleJumped;
     private bool isGrounded;
     private bool isKnockBack;
+
+    // UI Variables
+    [SerializeField]
+    private UIManager uiManager;
+    [SerializeField]
+    private int playerHealth;
     #endregion
 
     private void Awake()
@@ -58,14 +64,8 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if (inputDirection.x == 0)
-            rb.velocity = new Vector2(0, rb.velocity.y);
-
-        // Ground Check about whether player is standing on ground
-        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
-
-        // Read player input direction
-        inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
+        // Read and handle player input direction
+        PlayerInputHandle();
 
         // Set animation based on input
         SetAnimation();
@@ -80,8 +80,20 @@ public class PlayerController : MonoBehaviour
         FastRunCheck();
     }
 
+    private void PlayerInputHandle()
+    {
+        if (inputDirection.x == 0)
+            rb.velocity = new Vector2(0, rb.velocity.y);
+
+        // Read player input direction
+        inputDirection = inputControl.Gameplay.Movement.ReadValue<Vector2>();
+    }
+
     private void GroundResetStatus()
     {
+        // Ground Check about whether player is standing on ground
+        isGrounded = Physics2D.OverlapCircle(transform.position, checkRadius, groundLayer);
+
         if (isGrounded)
         {
             isKnockBack = false;
@@ -162,7 +174,10 @@ public class PlayerController : MonoBehaviour
     {   
         if (other.gameObject.tag == "Trap")
         {
+
             isKnockBack = true;
+            playerHealth--;
+            uiManager.SetHealth(playerHealth);
         }
 
         if (other.gameObject.tag == "DeathZone")
