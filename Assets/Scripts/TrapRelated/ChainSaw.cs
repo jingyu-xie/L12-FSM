@@ -94,11 +94,9 @@ public class ChainSaw : MonoBehaviour
                 isMovingTo = true;
 
             if (isMovingTo)
-                currentTargetIndex++;
+                MoveTo(pointList[++currentTargetIndex].transform.localPosition);
             else
-                currentTargetIndex--;
-
-            MoveTo(pointList[currentTargetIndex].transform.localPosition);
+                MoveTo(pointList[--currentTargetIndex].transform.localPosition);
         }
     }
 
